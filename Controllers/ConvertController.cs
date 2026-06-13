@@ -18,21 +18,21 @@ public class ConvertController : ControllerBase
     }
 
     [HttpGet]
-    public IActionResult Convert([FromQuery] string from, [FromQuery] string to, [FromQuery] double value)
+    public IActionResult Convert([FromQuery] string from, [FromQuery] string to, [FromQuery] double? value)
     {
-        if (string.IsNullOrWhiteSpace(from) || string.IsNullOrWhiteSpace(to))
-        {
-            return BadRequest(new ErrorResponse
-            {
-                Error   = "Missing parameters",
-                Details = "Query parameters 'from', 'to', and 'value' are all required."
-            });
-        }
+        if (string.IsNullOrWhiteSpace(from))
+            return BadRequest(new ErrorResponse { Error = "Missing parameter", Details = "'from' is required. Example: from=meters" });
+
+        if (string.IsNullOrWhiteSpace(to))
+            return BadRequest(new ErrorResponse { Error = "Missing parameter", Details = "'to' is required. Example: to=feet" });
+
+        if (value is null)
+            return BadRequest(new ErrorResponse { Error = "Missing parameter", Details = "'value' is required. Example: value=10" });
 
         try
         {
-            var request = new ConversionRequest { From = from, To = to, Value = value };
-            var result  = _conversionService.Convert(request);
+            var request = new ConversionRequest { From = from, To = to, Value = value.Value };
+            var result = _conversionService.Convert(request);
             return Ok(result);
         }
         catch (ArgumentException ex)
@@ -57,6 +57,12 @@ public class ConvertController : ControllerBase
     {
         if (request is null)
             return BadRequest(new ErrorResponse { Error = "Invalid body", Details = "Request body is required." });
+
+        if (string.IsNullOrWhiteSpace(request.From))
+            return BadRequest(new ErrorResponse { Error = "Missing field", Details = "'from' is required." });
+
+        if (string.IsNullOrWhiteSpace(request.To))
+            return BadRequest(new ErrorResponse { Error = "Missing field", Details = "'to' is required." });
 
         try
         {
