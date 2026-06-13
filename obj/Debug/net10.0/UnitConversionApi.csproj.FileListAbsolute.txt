@@ -12,6 +12,7 @@
 /Users/divyabandi/VS/UnitConversionApi/obj/Debug/net10.0/UnitConversionApi.AssemblyInfo.cs
 /Users/divyabandi/VS/UnitConversionApi/obj/Debug/net10.0/UnitConversionApi.csproj.CoreCompileInputs.cache
 /Users/divyabandi/VS/UnitConversionApi/obj/Debug/net10.0/UnitConversionApi.MvcApplicationPartsAssemblyInfo.cache
+/Users/divyabandi/VS/UnitConversionApi/obj/Debug/net10.0/UnitConversionApi.sourcelink.json
 /Users/divyabandi/VS/UnitConversionApi/obj/Debug/net10.0/rjimswa.dswa.cache.json
 /Users/divyabandi/VS/UnitConversionApi/obj/Debug/net10.0/rjsmrazor.dswa.cache.json
 /Users/divyabandi/VS/UnitConversionApi/obj/Debug/net10.0/rjsmcshtml.dswa.cache.json

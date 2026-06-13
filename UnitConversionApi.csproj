@@ -1,48 +1,10 @@
-# Unit Conversion API
+<Project Sdk="Microsoft.NET.Sdk.Web">
 
-A simple REST API that converts values between different units of measurement. Built with ASP.NET Core.
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>UnitConversionApi</RootNamespace>
+  </PropertyGroup>
 
-You can use it to convert things like meters to feet, Celsius to Fahrenheit, or kilograms to pounds — just send a GET request with the values you want to convert.
-
-## How to Run
-
-1. Make sure you have .NET SDK installed on your machine
-2. Clone this repository
-3. Navigate into the UnitConversionApi folder in your terminal
-4. Run:
-
-dotnet run
-
-5. The API starts at http://localhost:5259
-
-## Example Requests
-
-Convert 10 meters to feet:
-http://localhost:5259/api/convert?from=meters&to=feet&value=10
-
-Convert 100 Celsius to Fahrenheit:
-http://localhost:5259/api/convert?from=celsius&to=fahrenheit&value=100
-
-Convert 70kg to pounds:
-http://localhost:5259/api/convert?from=kg&to=lbs&value=70
-
-## Supported Categories
-
-Length: meters, km, feet, miles, inches, cm, yards, mm
-Temperature: celsius, fahrenheit, kelvin
-Weight: kg, pounds, grams, ounces, tonnes
-Speed: km/h, mph, m/s, knots
-Area: sqm, sqft, acres, hectares
-
-## Project Structure
-
-Controllers handles incoming API requests
-Models defines the structure of requests and responses
-Services contains all the conversion logic
-Program.cs wires everything together on startup
-
-## Notes
-
-Adding a new unit is easy — just add one line to the dictionary in ConversionService.cs with the unit name and its conversion factor.
-
-Temperature is handled differently from other units because Celsius, Fahrenheit and Kelvin have different starting points, so simple multiplication does not work.
+</Project>
