@@ -1,1 +1,6 @@
-<Project><ItemGroup><Compile Remove="UnitConversionApi.Tests\**"/><None Remove="UnitConversionApi.Tests\**"/></ItemGroup></Project>
+<Project>
+  <ItemGroup>
+    <Compile Remove="UnitConversionApi.Tests/**" />
+    <None Remove="UnitConversionApi.Tests/**" />
+  </ItemGroup>
+</Project>
