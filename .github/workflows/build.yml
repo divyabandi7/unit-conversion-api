@@ -18,11 +18,8 @@ jobs:
       with:
         dotnet-version: '10.0.x'
 
-    - name: Restore dependencies
-      run: dotnet restore UnitConversionApi.slnx
-
     - name: Build
-      run: dotnet build UnitConversionApi.slnx --no-restore
+      run: dotnet build UnitConversionApi.csproj
 
     - name: Test
-      run: dotnet test UnitConversionApi.slnx --no-restore
+      run: dotnet test ../UnitConversionApi.Tests/UnitConversionApi.Tests.csproj
