@@ -1,0 +1,7 @@
+<Project>
+  <ItemGroup Condition="'$(MSBuildProjectName)' == 'UnitConversionApi'">
+    <Compile Remove="UnitConversionApi.Tests\**\*" />
+    <None Remove="UnitConversionApi.Tests\**\*" />
+    <Content Remove="UnitConversionApi.Tests\**\*" />
+  </ItemGroup>
+</Project>
