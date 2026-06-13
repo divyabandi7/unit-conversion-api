@@ -1,32 +1,42 @@
 # Unit Conversion API
 
-I built this as a simple API to convert between different units of measurement. You send it a value, tell it what unit you are converting from and to, and it gives you the result. That is really all it does.
+I built this as a simple API to convert between different units of measurement. You send it a value, tell it what unit you are converting from and to, and it gives you the result.
 
-For example you can ask it to convert 10 meters to feet, or 100 degrees Celsius to Fahrenheit, or 70 kilograms to pounds.
+## How to Run
 
-## How to Run It
+You will need .NET SDK installed on your machine first. Then open your terminal and run:
 
-You need .NET SDK installed first. Then:
+git clone https://github.com/divyabandi7/unit-conversion-api.git
 
-1. Clone this repo
-2. Open a terminal and go into the UnitConversionApi folder
-3. Type this and hit Enter:
+cd unit-conversion-api
 
-dotnet run
+dotnet run --no-launch-profile
 
-4. Once it starts you will see a localhost address in the terminal. Mine runs on http://localhost:5259
+Once it starts you will see: Now listening on http://localhost:5000
 
-## Trying It Out
+## Try It Out
 
-Just open your browser and paste one of these:
+Open your browser and paste any of these:
 
-http://localhost:5259/api/convert?from=meters&to=feet&value=10
+http://localhost:5000/api/convert?from=meters&to=feet&value=10
 
-http://localhost:5259/api/convert?from=celsius&to=fahrenheit&value=100
+http://localhost:5000/api/convert?from=celsius&to=fahrenheit&value=100
 
-http://localhost:5259/api/convert?from=kg&to=lbs&value=70
+http://localhost:5000/api/convert?from=kg&to=lbs&value=70
 
-## What Units Are Supported
+http://localhost:5000/api/convert?from=km/h&to=mph&value=100
+
+http://localhost:5000/api/convert?from=acres&to=hectares&value=5
+
+http://localhost:5000/api/convert/units
+
+## Expected Results
+
+meters to feet = 32.8084
+celsius to fahrenheit = 212
+kg to lbs = 154.3234
+
+## Supported Units
 
 Length: meters, km, feet, miles, inches, cm, yards, mm
 Temperature: celsius, fahrenheit, kelvin
@@ -34,15 +44,15 @@ Weight: kg, pounds, grams, ounces, tonnes
 Speed: km/h, mph, m/s, knots
 Area: sqm, sqft, acres, hectares
 
-## How the Code is Organised
+## Project Structure
 
-Controllers - this is where requests come in and responses go out
-Models - just the data structures
-Services - all the actual conversion logic lives here
-Program.cs just wires it all together when the app starts
+Controllers - handles incoming requests
+Models - defines request and response structure
+Services - contains all conversion logic
+Program.cs - wires everything together
 
-## A Couple of Things Worth Mentioning
+## Notes
 
-Adding a new unit is really straightforward. You just add one line to the dictionary in ConversionService.cs with the unit name and its conversion factor.
+Adding a new unit is easy. Just add one line to the dictionary in ConversionService.cs with the unit name and conversion factor.
 
-Temperature works a bit differently from the other units. Because Celsius, Fahrenheit and Kelvin all have different zero points you cannot just multiply by a factor, so I handle those with proper formulas instead.
+Temperature uses formula based conversion because Celsius, Fahrenheit and Kelvin have different zero points.
