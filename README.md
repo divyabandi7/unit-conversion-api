@@ -9,7 +9,7 @@ A REST API built with ASP.NET Core that converts numerical values between differ
 **Prerequisites:** [.NET 10 SDK](https://dotnet.microsoft.com/download)
 
 ```bash
-git clone https://github.com/dk18234/unit-conversion-api.git
+git clone https://github.com/divyabandi7/unit-conversion-api
 cd unit-conversion-api
 dotnet run
 ```
