@@ -1,58 +1,97 @@
 # Unit Conversion API
 
-I built this as a simple API to convert between different units of measurement. You send it a value, tell it what unit you are converting from and to, and it gives you the result.
+A REST API built with ASP.NET Core that converts numerical values between different units of measurement — e.g., meters to feet, Celsius to Fahrenheit, kilograms to pounds.
+
+---
 
 ## How to Run
 
-You will need .NET SDK installed on your machine first. Then open your terminal and run:
+**Prerequisites:** [.NET 10 SDK](https://dotnet.microsoft.com/download)
 
-git clone https://github.com/divyabandi7/unit-conversion-api.git
-
+```bash
+git clone https://github.com/dk18234/unit-conversion-api.git
 cd unit-conversion-api
+dotnet run
+```
 
-dotnet run --no-launch-profile
+The API starts at `http://localhost:5259`.
 
-Once it starts you will see: Now listening on http://localhost:5000
+Swagger UI (interactive docs) is available at: `http://localhost:5259/swagger`
 
-## Try It Out
+---
 
-Open your browser and paste any of these:
+## Endpoints
 
-http://localhost:5000/api/convert?from=meters&to=feet&value=10
+| Method | Path | Description |
+|--------|------|-------------|
+| GET | `/api/convert?from=X&to=Y&value=N` | Convert a value via query string |
+| POST | `/api/convert` | Convert a value via JSON body |
+| GET | `/api/convert/units` | List all supported unit identifiers |
 
-http://localhost:5000/api/convert?from=celsius&to=fahrenheit&value=100
+**GET example:**
+```
+GET /api/convert?from=meters&to=feet&value=10
+```
 
-http://localhost:5000/api/convert?from=kg&to=lbs&value=70
+**POST example:**
+```json
+POST /api/convert
+{ "from": "kg", "to": "lbs", "value": 70 }
+```
 
-http://localhost:5000/api/convert?from=km/h&to=mph&value=100
+**Successful response:**
+```json
+{
+  "from": "meters",
+  "to": "feet",
+  "inputValue": 10,
+  "outputValue": 32.808399,
+  "category": "length"
+}
+```
 
-http://localhost:5000/api/convert?from=acres&to=hectares&value=5
+---
 
-http://localhost:5000/api/convert/units
+## Supported Categories
 
-## Expected Results
+| Category | Example units |
+|----------|---------------|
+| Length | `m`, `km`, `cm`, `mm`, `ft`, `in`, `yd`, `mi` |
+| Temperature | `celsius`, `fahrenheit`, `kelvin` (also `c`, `f`, `k`) |
+| Weight | `kg`, `g`, `mg`, `lb`, `lbs`, `oz`, `ton` |
+| Speed | `km/h`, `mph`, `m/s`, `knots` |
+| Area | `sqm`, `sqkm`, `sqft`, `acre`, `hectare` |
 
-meters to feet = 32.8084
-celsius to fahrenheit = 212
-kg to lbs = 154.3234
+Run `GET /api/convert/units` for the full list of accepted identifiers.
 
-## Supported Units
-
-Length: meters, km, feet, miles, inches, cm, yards, mm
-Temperature: celsius, fahrenheit, kelvin
-Weight: kg, pounds, grams, ounces, tonnes
-Speed: km/h, mph, m/s, knots
-Area: sqm, sqft, acres, hectares
+---
 
 ## Project Structure
 
-Controllers - handles incoming requests
-Models - defines request and response structure
-Services - contains all conversion logic
-Program.cs - wires everything together
+```
+Controllers/   → HTTP request handling
+Models/        → Request/response shapes
+Services/      → Conversion logic (interface + implementation)
+Program.cs     → App bootstrap and DI registration
+```
 
-## Notes
+---
 
-Adding a new unit is easy. Just add one line to the dictionary in ConversionService.cs with the unit name and conversion factor.
+## Design Decisions & Trade-offs
 
-Temperature uses formula based conversion because Celsius, Fahrenheit and Kelvin have different zero points.
+### Dictionary-based conversion with a single base unit per category
+Each unit is stored as a `(category, toBase)` pair in a case-insensitive dictionary. To convert, the value is multiplied by the source's `toBase` factor and divided by the target's — one formula covers all linear units. This makes adding a new unit a one-line change and keeps the logic free of per-unit branching.
+
+**Trade-off:** the dictionary lives in-memory and is hardcoded. For a system with hundreds of units updated at runtime, this data would move to a database with the same conversion math unchanged — only the data source changes, not the formula.
+
+### Temperature as a special case
+Celsius, Fahrenheit, and Kelvin have offset scales, so a single linear factor does not work. These are routed to a two-step formula (→ Celsius → target) instead. The dictionary still holds them so that category validation and "unsupported unit" errors remain consistent; the `ToBase` field is unused for this category.
+
+### GET and POST both supported
+A GET with query parameters is the most natural fit for a conversion — it is a read operation, bookmarkable, and works directly from a browser. POST is added for clients that prefer a JSON body. Both share the same service call with no duplicated logic.
+
+### Singular and plural aliases
+`meter`/`meters`, `foot`/`feet`, `pound`/`pounds`, etc., are registered as separate keys pointing to the same factor. This avoids forcing callers to know the canonical form and makes the API more forgiving.
+
+### Stateless singleton service
+`ConversionService` holds no mutable state — only the unit dictionary — so it is safe to register as a singleton, avoiding per-request allocation on every API call.

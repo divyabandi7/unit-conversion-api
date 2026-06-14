@@ -1,6 +1,31 @@
-@UnitConversionApi_HostAddress = http://localhost:5259
+@host = http://localhost:5259
 
-GET {{UnitConversionApi_HostAddress}}/weatherforecast/
+### Convert meters to feet (GET)
+GET {{host}}/api/convert?from=meters&to=feet&value=10
+Accept: application/json
+
+###
+
+### Convert Celsius to Fahrenheit (GET)
+GET {{host}}/api/convert?from=celsius&to=fahrenheit&value=100
+Accept: application/json
+
+###
+
+### Convert kg to pounds (POST)
+POST {{host}}/api/convert
+Content-Type: application/json
+
+{
+  "from": "kg",
+  "to": "lbs",
+  "value": 70
+}
+
+###
+
+### List all supported units
+GET {{host}}/api/convert/units
 Accept: application/json
 
 ###
